@@ -10,3 +10,4 @@ _ignored/
 .vitepress/cache/*
 .vitepress/dist/*
 **/__*
+build/

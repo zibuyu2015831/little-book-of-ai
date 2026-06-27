@@ -1,0 +1,34 @@
+diff --git a/dist/node/serve-CFRRJDfQ.js b/dist/node/serve-CFRRJDfQ.js
+index cea6898ab25ad6621e9ad384eb766a9efb9095d1..30b7f4092c46d08a9c2c4646e86be93e655f9768 100644
+--- a/dist/node/serve-CFRRJDfQ.js
++++ b/dist/node/serve-CFRRJDfQ.js
+@@ -42554,22 +42554,23 @@ async function createVitePressPlugin(siteConfig, ssr = false, pageToHashMap, cli
+       }
+     },
+     async transform(code, id) {
+-      if (id.endsWith(".vue")) {
+-        return processClientJS(code, id);
+-      } else if (id.endsWith(".md")) {
++      const cleanId = id.replace(/[?#].*$/, "");
++      if (cleanId.endsWith(".vue")) {
++        return processClientJS(code, cleanId);
++      } else if (cleanId.endsWith(".md")) {
+         const { vueSrc, deadLinks, includes } = await markdownToVue(
+           code,
+-          id,
++          cleanId,
+           config.publicDir
+         );
+         allDeadLinks.push(...deadLinks);
+         if (includes.length) {
+           includes.forEach((i) => {
+-            (importerMap[slash(i)] ??= /* @__PURE__ */ new Set()).add(id);
++            (importerMap[slash(i)] ??= /* @__PURE__ */ new Set()).add(cleanId);
+             this.addWatchFile(i);
+           });
+         }
+-        return processClientJS(vueSrc, id);
++        return processClientJS(vueSrc, cleanId);
+       }
+     },
+     renderStart() {
